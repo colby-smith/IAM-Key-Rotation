@@ -29,13 +29,16 @@ data "aws_iam_policy_document" "lambda_policy" {
       "iam:CreateAccessKey",
       "iam:DeleteAccessKey",
       "iam:ListAccessKeys",
+      "iam:ListUsers",
       "ssm:PutParameter",
       "ssm:GetParameter",
-      "ssm:DeleteParameter"   
+      "ssm:DeleteParameter",
+      "ssm:ListParameters"
     ]
     resources = ["*"]
   }
 }
+
 
 resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
   role       = aws_iam_role.lambda_role.name

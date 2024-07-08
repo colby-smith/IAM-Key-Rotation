@@ -8,7 +8,6 @@ resource "aws_lambda_function" "key_rotation" {
 
   environment {
     variables = {
-      USER_NAME            = var.user_name
       NEW_KEY_DESCRIPTION  = var.new_key_description
       PARAMETER_PREFIX     = var.parameter_prefix
     }
