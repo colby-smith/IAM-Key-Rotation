@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda_role" {
-  name = "KeyRotationLambdaRole"
+  name = "Key_Rotation_Lambda_Role"
 
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
@@ -43,4 +43,40 @@ data "aws_iam_policy_document" "lambda_policy" {
 resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
   role       = aws_iam_role.lambda_role.name
   policy_arn  = aws_iam_policy.lambda_policy.arn
+}
+
+resource "aws_iam_role" "eventbridge" {
+  name = "Key_Rotation_EventBridge_Role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect    = "Allow",
+        Action    = "sts:AssumeRole",
+        Principal = {
+          Service = "scheduler.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+
+
+resource "aws_iam_role_policy" "eventbridge_policy" {
+  name   = "Key_Rotation_EventBridge_Policy"
+  role   = aws_iam_role.eventbridge.id
+  policy  = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = [
+          "lambda:InvokeFunction"
+        ],
+        Resource = aws_lambda_function.key_rotation.arn
+      }
+    ]
+  })
 }

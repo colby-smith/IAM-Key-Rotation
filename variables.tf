@@ -7,5 +7,5 @@ variable "new_key_description" {
 variable "parameter_prefix" {
   description = "Prefix for SSM parameter names"
   type        = string
-  default     = "/IAM/users/"
+  default     = "/IAM/Users/"
 }
